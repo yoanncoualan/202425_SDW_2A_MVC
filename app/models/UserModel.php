@@ -44,4 +44,34 @@ class UserModel extends Bdd{
 
     return $insert->rowCount();
   }
+
+  public function login($POST): bool
+  {
+    $email = htmlspecialchars(trim($POST['email']));
+    $pwd = htmlspecialchars(trim($POST['pwd']));
+    
+    $sql = 'SELECT * FROM user WHERE email = :email LIMIT 1';
+
+    $params = [
+      'email' => $email
+    ];
+
+    $select = $this->co->prepare($sql);
+    $select->execute($params);
+
+    if($select->rowCount() == 1){
+      $user = $select->fetch();
+      if(password_verify($pwd, $user['pwd'])){
+        $_SESSION['email'] = $user['email'];
+        return true;
+      }
+      else{
+        $_SESSION['errors'][] = 'Identifiant ou mot de passe incorrect';
+        return false;
+      }
+    }
+    else{
+      return false;
+    }
+  }
 }

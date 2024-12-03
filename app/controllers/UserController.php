@@ -41,4 +41,35 @@ class UserController{
       die('<p>Une erreur est survenue</p>');
     }
   }
+
+  public function login(): void
+  {
+    $logged = false;
+    if(isset($_SESSION['email']) && !empty($_SESSION['email'])){
+      $logged = true;
+    }
+
+    if(isset($_POST['log_user'])){
+      if(empty(trim($_POST['email']))){
+        $_SESSION['errors'][] = 'Email obligatoire';
+      }
+      if(empty(trim($_POST['pwd']))){
+        $_SESSION['errors'][] = 'Mot de passe obligatoire';
+      }
+
+      $userModel = new UserModel();
+      $login = $userModel->login($_POST);
+
+      if($login == true){
+        $logged = true;
+      }
+    }
+
+    require './app/views/user/login.php';
+  }
+
+  public function logout(){
+    unset($_SESSION['email']);
+    header('location: /user/login');
+  }
 }
