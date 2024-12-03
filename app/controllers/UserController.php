@@ -1,20 +1,32 @@
 <?php
 
 class UserController{
+  use Render;
+
   public function findAll(): void
   {
     $userModel = new UserModel();
     $users = $userModel->findAll();
- 
-    require_once './app/views/user/all.php';
+
+    $data = [
+      'title' => 'Liste des utilisateurs',
+      'users' => $users
+    ];
+
+    $this->renderView('user/all', $data);
   }
  
   public function findOneById(int $id): void
   {
     $userModel = new UserModel();
     $user = $userModel->findOneById($id);
- 
-    require_once './app/views/user/one.php';
+
+    $data = [
+      'title' => $user->getEmail(),
+      'user' => $user
+    ];
+
+    $this->renderView('user/one', $data, 'layout2');
   }
 
   public function create(): void
