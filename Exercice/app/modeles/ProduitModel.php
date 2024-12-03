@@ -29,4 +29,30 @@ class ProduitModel extends Bdd{
 
     return $produits_as_obj;
   }
+
+  public function findByCategorie(string $categorie_slug)
+  {
+    $sql = 'SELECT p.* FROM produit p INNER JOIN categorie c ON p.categorie_id = c.id WHERE c.slug = :slug';
+    $params = [
+      'slug' => htmlspecialchars($categorie_slug)
+    ];
+
+    $select = $this->prepareExecute($sql, $params);
+    $produits = $select->fetchAll();
+    
+    return $produits;
+  }
+
+  public function findBySlug(string $produit_slug)
+  {
+    $sql = 'SELECT p.* FROM produit p WHERE p.slug = :slug LIMIT 1';
+    $params = [
+      'slug' => htmlspecialchars($produit_slug)
+    ];
+
+    $select = $this->prepareExecute($sql, $params);
+    $produit = $select->fetch();
+    
+    return $produit;
+  }
 }
