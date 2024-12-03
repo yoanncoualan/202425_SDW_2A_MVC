@@ -1,5 +1,7 @@
 # Cours MVC
 
+[Support de cours](https://docs.yoanncoualan.com/php-pdo-mvc/mvc)
+
 ## Installation du projet
 
 1. clone du projet
